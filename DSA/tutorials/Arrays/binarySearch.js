@@ -23,7 +23,7 @@ function binarySearch(array, target) {
     return -1;
 }
 
-console.log(binarySearch(numbers, 2));
+console.log(binarySearch(numbers, 11));
 
 
 
