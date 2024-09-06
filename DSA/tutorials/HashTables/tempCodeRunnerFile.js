@@ -1,0 +1,1 @@
+console.log(hashMap.get("key1")); // Output: value1

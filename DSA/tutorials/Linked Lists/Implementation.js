@@ -1,5 +1,5 @@
 class Node {
-    constructor(data) {
+    constructor(data = 0) {
         this.data = data;
         this.next = null;
     }
@@ -49,6 +49,25 @@ class LinkedList {
         } 
     }
 
+    insert(position, data) {
+
+        if(position > this.size || position < 1) return;
+
+        if(this.head === null) {
+            if(position !== 1) return;
+            this.append(data);
+        }
+
+        let counter = 1;
+        let current = this.head;
+        while(counter !== position - 1 && current) {current = current.next; counter++;}
+        let temp = current.next;
+        current.next = new Node(data);
+        current.next.next = temp;
+
+        this.size++;
+    }
+
     // Method to print the list
     printList() {
         let current = this.head; // start from the first node
@@ -74,17 +93,7 @@ myLinkedList.append(9);
 
 myLinkedList.printList();
 
-// finding the lowest value in a linked list
-let lowestValue = Infinity;
-let current = myLinkedList.head;
+myLinkedList.insert(2, 5);
 
-while(current !== null) { // as long as the current is traversing in the list's scope
-    if(current.data < lowestValue ) {
-        lowestValue = current.data;
-    }
-
-    current = current.next; // traverse to the next node
-}
-
-console.log(lowestValue);
+myLinkedList.printList();
 

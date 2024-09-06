@@ -88,5 +88,3 @@ class DoublyLinkedList {
     }
 
 }
-
-console.log("Hello World");
