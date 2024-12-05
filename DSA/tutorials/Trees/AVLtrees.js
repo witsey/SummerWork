@@ -5,10 +5,15 @@ class TreeNode
         this.val = val;
         this.left = left;
         this.right = right;
+        this.height = -1;
     }
+
+    updateHeight() {this.height = 1 + Math.max(this.left ? this.left.height : -1, this.right ? this.right.height : -1)}
+    getBalanceFactor() {return this ? (this.right ? this.right.height : -1) - (this.left ? this.left.height : 0) : -1}
 }
 
-class BinaryTree 
+
+class AVLBinaryTree 
 {
     constructor() 
     {
@@ -17,6 +22,7 @@ class BinaryTree
         this.height = -1;
     }
 
+    
     insert(val) // a method to insert a new value to the tree
     {
         const newNode = new TreeNode(val);
@@ -29,6 +35,7 @@ class BinaryTree
         }
         this.size++;
     }
+
 
     insertNode(node, newNode, currentHeight) // a method to insert a node in it's correct position
     {
@@ -51,9 +58,64 @@ class BinaryTree
                 node.right = this.insertNode(node.right, newNode, currentHeight + 1);
             }
         }
+
+        node.updateHeight();
+
+        if (node.getBalanceFactor() > 1 || node.getBalanceFactor() < -1) {this.balance(node, node.getBalanceFactor())}
+
         return node;
     }
 
+
+    balance(node, balanceFactor) 
+    {
+        if (balanceFactor < -1) // Left heavy
+        {
+            if (node.left.getBalanceFactor() > 0) // LR Case
+                node.left = this.rotateLeft(node.left);
+
+            return this.rotateRight(node);
+        }
+        else // Right heavy
+        {
+            if (node.right.getBalanceFactor() < 0) // RL case
+                node.right = this.rotateRight(node.right)
+            
+            return this.rotateLeft(node);
+        }
+    }
+    
+
+    rotateRight(node) 
+    {
+        const leftDummy = node.left;          // set a dummy to be the left child of our node
+        const rightDummy = leftDummy.right;  // set another dummy to hold the right child of the left child of our node
+
+        leftDummy.right = node;              // now do the rotation by assiging our node as the right child of it's left child (the left child is now a parent)
+        node.left = rightDummy;             // to prevent any node loss, assign the right child of prev left child as the right child of our node
+        
+        node.updateHeight();
+        leftDummy.updateHeight();          // update heights
+
+        return leftDummy                  // return the new root of the tree (or subtree)
+    }
+
+
+    rotateLeft(node) 
+    {
+        const rightDummy = node.right;
+        const leftDummy = rightDummy.left;
+
+        rightDummy.left = node;
+        node.right = leftDummy;
+
+        node.updateHeight();
+        rightDummy.updateHeight();
+
+        return rightDummy;
+    }
+
+    
     search(val, node = this.root) 
     {
         if (node === null)
@@ -68,6 +130,7 @@ class BinaryTree
         else 
             return this.search(val, node.right)
     }
+
 
     minNode(node) 
     {
@@ -90,6 +153,7 @@ class BinaryTree
         this.preOrderTraversal(node.right)
     }
 
+
     inOrderTraversal(node = this.root) 
     {
         if (node === null)
@@ -99,6 +163,7 @@ class BinaryTree
         console.log(node.val, ', ')
         this.inOrderTraversal(node.right)
     }
+
 
     postOrderTraversal(node = this.root)
     {
@@ -110,11 +175,12 @@ class BinaryTree
         console.log(node.val, ', ')
     }
     
-    getSize() {return this.size}
-    getHeight() {return this.height} 
+    getTreeSize() {return this.size}
+    getTreeHeight() {return this.height} 
 }
 
-const tree = new BinaryTree();
+
+const tree = new AVLBinaryTree();
 tree.insert(10);
 tree.insert(0);
 tree.insert(15);
@@ -123,5 +189,4 @@ tree.insert(7);
 tree.insert(12);
 tree.insert(17);
 
-console.log(tree.root.val)
-console.log(tree.minNode(tree.root))
+tree.postOrderTraversal();

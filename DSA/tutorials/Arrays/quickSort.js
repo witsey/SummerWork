@@ -7,15 +7,15 @@ function partion(array, l, h) {
     while(i < j) {
         do {
             i++;
-        } while(myNumbers[i] < pivot); // we keep increamenting the i until we find a number that is less than the pivot
+        } while(array[i] < pivot); // we keep increamenting the i until we find a number that is less than the pivot
         do {
             j--;
-        } while(myNumbers[j] > pivot); // we keep decreamenting the i until we find a number that is larger than the pivot
+        } while(array[j] > pivot); // we keep decreamenting the i until we find a number that is larger than the pivot
         
-        [myNumbers[i], myNumbers[j]] = [myNumbers[j], myNumbers[i]]; // swap these numbers
+        [array[i], array[j]] = [array[j], array[i]]; // swap these numbers
     }
     
-    [myNumbers[l], myNumbers[j]] = [myNumbers[j], myNumbers[l]] // swap the pivot with the current array of j value
+    [array[l], array[j]] = [array[j], array[l]] // swap the pivot with the current array of j value
     return j; // return the current position for further partitioning in the array
 }
 

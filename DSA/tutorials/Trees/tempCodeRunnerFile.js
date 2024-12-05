@@ -1,0 +1,3 @@
+
+    getHeight() {return this.height} 
+}
